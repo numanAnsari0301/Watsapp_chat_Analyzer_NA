@@ -4,6 +4,24 @@ import pandas as pd
 from wordcloud import WordCloud
 from collections import Counter
 import emoji
+import os
+
+#path for font that render linux can fetch and read
+if os.name == "nt":
+    font_candidates = [
+        r"C:\Windows\Fonts\Nirmala.ttc",
+        r"C:\Windows\Fonts\arial.ttf",
+    ]
+else:
+    font_candidates = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    ]
+
+FONT_PATH = next(
+    (path for path in font_candidates if os.path.exists(path)),
+    None
+)
+
 
 extractor = URLExtract()
 
@@ -92,6 +110,7 @@ def create_wordcloud(selected_user, df):
         height=500,
         min_font_size=10,
         background_color='white',
+        font_path=FONT_PATH
     )
 
     return wc.generate(text)

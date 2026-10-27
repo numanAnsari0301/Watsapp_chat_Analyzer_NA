@@ -5,12 +5,37 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 import numpy as np
+import os
 
+# font_path = 'C:/Windows/Fonts/Nirmala.ttc' 
+# font_manager.fontManager.addfont(font_path)
+# font_manager.fontManager.addfont('C:/Windows/Fonts/seguiemj.ttf')   # Segoe UI Emoji
+# plt.rcParams['font.family'] = ['Nirmala UI', 'Segoe UI Emoji']
 
-font_path = 'C:/Windows/Fonts/Nirmala.ttc' 
-font_manager.fontManager.addfont(font_path)
-font_manager.fontManager.addfont('C:/Windows/Fonts/seguiemj.ttf')   # Segoe UI Emoji
-plt.rcParams['font.family'] = ['Nirmala UI', 'Segoe UI Emoji']
+# Cross-platform font configuration: Windows and Render/Linux
+if os.name == "nt":
+    font_candidates = [
+        (r"C:\Windows\Fonts\Nirmala.ttc", "Nirmala UI"),
+        (r"C:\Windows\Fonts\arial.ttf", "Arial"),
+    ]
+else:
+    font_candidates = [
+        ("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "DejaVu Sans"),
+    ]
+
+available_font = None
+
+for font_path, font_name in font_candidates:
+    if os.path.exists(font_path):
+        try:
+            font_manager.fontManager.addfont(font_path)
+            available_font = font_name
+            break
+        except (OSError, RuntimeError):
+            continue
+
+if available_font:
+    plt.rcParams["font.family"] = available_font
 
 st.sidebar.title('Watsapp Chat Analyzer')
 
@@ -140,8 +165,9 @@ if uploaded_file is not None:
                 st.dataframe(new_df)
                 
                 
-    st.divider()
+   
     #3. wordcloud
+    st.divider()
     wc_img = helper.create_wordcloud(selected_user,df)
     st.header("Word Cloud")
     fig,ax = plt.subplots()
