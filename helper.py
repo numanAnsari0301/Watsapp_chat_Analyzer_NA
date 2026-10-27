@@ -4,6 +4,8 @@ import pandas as pd
 from wordcloud import WordCloud
 from collections import Counter
 import emoji
+from pathlib import Path
+FONT_PATH = str(Path(__file__).parent / "fonts" / "NotoSansDevanagari-Regular.ttf")
 
 extractor = URLExtract()
 
@@ -94,18 +96,12 @@ def create_wordcloud(selected_user, df):
     if not text:
         return None
 
-    wc = WordCloud(
-        width=500,
-        height=500,
-        background_color='white',
-        font_path='C:/Windows/Fonts/Nirmala.ttc',
-        regexp=r"[\w\u0900-\u097F']+",
-        collocations=False
-    )
+    wc = WordCloud(width=500, height=500, min_font_size=10,
+                background_color='white', font_path=FONT_PATH)
 
     df_wc = wc.generate(text)
 
-    return df_wc
+    sreturn df_wc
 
 
 
