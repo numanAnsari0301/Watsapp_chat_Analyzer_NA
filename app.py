@@ -5,11 +5,17 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 import numpy as np
+from pathlib import Path
 
-font_path = 'C:/Windows/Fonts/Nirmala.ttc' 
-font_manager.fontManager.addfont(font_path)
-font_manager.fontManager.addfont('C:/Windows/Fonts/seguiemj.ttf')   # Segoe UI Emoji
-plt.rcParams['font.family'] = ['Nirmala UI', 'Segoe UI Emoji']
+FONT_DIR = Path(__file__).parent / "fonts"
+families = []
+for name in ["NotoSansDevanagari-Regular.ttf", "NotoEmoji-Regular.ttf"]:
+    f = FONT_DIR / name
+    if f.exists():
+        font_manager.fontManager.addfont(str(f))
+        families.append(font_manager.FontProperties(fname=str(f)).get_name())
+
+plt.rcParams['font.family'] = families + ['DejaVu Sans']
 
 st.sidebar.title('Watsapp Chat Analyzer')
 
