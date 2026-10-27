@@ -4,8 +4,6 @@ import pandas as pd
 from wordcloud import WordCloud
 from collections import Counter
 import emoji
-from pathlib import Path
-FONT_PATH = str(Path(__file__).parent / "fonts" / "NotoSansDevanagari-Regular.ttf")
 
 extractor = URLExtract()
 
@@ -62,12 +60,11 @@ def most_busy_users(df):
     
     return x , new_df
         
-
-
 def create_wordcloud(selected_user, df):
 
     with open('Hinglish_stopwords.txt', 'r', encoding='utf-8') as f:
-        stop_words = set(line.strip() for line in f if line.strip())
+        stop_words = set(line.strip().lower()
+                         for line in f if line.strip())
 
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
@@ -76,32 +73,28 @@ def create_wordcloud(selected_user, df):
     temp = temp[temp['message'] != '<Media omitted>\n']
 
     def remove_stopwords(message):
-        y = []
-
-        for word in str(message).lower().split():
-            if word not in stop_words:
-                y.append(word)
-
-        return " ".join(y)
+        words = str(message).lower().split()
+        return " ".join(word for word in words
+                        if word not in stop_words)
 
     temp['message'] = temp['message'].apply(remove_stopwords)
 
-    # Check whether the DataFrame is empty
     if temp.empty:
         return None
 
     text = temp['message'].str.cat(sep=" ").strip()
 
-    # Check whether any text remains after stopword removal
     if not text:
         return None
 
-    wc = WordCloud(width=500, height=500, min_font_size=10,
-                background_color='white', font_path=FONT_PATH)
+    wc = WordCloud(
+        width=500,
+        height=500,
+        min_font_size=10,
+        background_color='white',
+    )
 
-    df_wc = wc.generate(text)
-
-    return df_wc
+    return wc.generate(text)
 
 
 
