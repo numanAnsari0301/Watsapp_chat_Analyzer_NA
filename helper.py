@@ -101,7 +101,7 @@ def create_wordcloud(selected_user, df):
 
     df_wc = wc.generate(text)
 
-    sreturn df_wc
+    return df_wc
 
 
 
