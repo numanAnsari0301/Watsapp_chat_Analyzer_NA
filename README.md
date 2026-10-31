@@ -5,7 +5,7 @@ A Streamlit web app that turns an exported WhatsApp chat into an interactive das
 > **Privacy:** the chat is processed locally on your machine. Nothing is sent to any external service.
 
 ---
-
+## [live link(click)] (https://watsapp-chat-analyzer-na-7pq0.onrender.com)
 ## ✨ Features
 
 - **Top statistics:** total messages, total words, media messages and shared links
